@@ -16,7 +16,7 @@ To complete this guide we will use the following documentation:
 - [Azure Account](https://azure.microsoft.com/en-us/free/search/)
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/)
 - [Azure Service Principal](https://learn.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals)
-  - CAPZ
+  - [CAPZ](https://capz.sigs.k8s.io/topics/getting-started.html)
  
 
 
