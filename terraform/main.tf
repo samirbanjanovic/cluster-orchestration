@@ -5,28 +5,35 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.0"
     }
+    azapi = {
+      source  = "azure/azapi"
+      version = ">=1.1.0"
+    }
   }
 }
 
-// register azurerm terraform provider
+
+provider "azapi" {}
+
 provider "azurerm" {
   features {}
+}
+
+# current client configuration for azure cli
+data "azurerm_client_config" "current" {}
+
+# random string of 5 alpha lower case characters used for unique global names
+resource "random_string" "random" {
+  length  = 5
+  special = false
+  upper   = false
+  numeric = false
 }
 
 // create resource group
 resource "azurerm_resource_group" "fleet" {
   name     = var.resource_group_name
   location = var.location
-}
-
-// create kubernetes fleet manager
-resource "azurerm_kubernetes_fleet_manager" "fleet" {
-  hub_profile {
-    dns_prefix = var.fleet_name
-  }
-  location            = azurerm_resource_group.fleet.location
-  name                = var.fleet_name
-  resource_group_name = azurerm_resource_group.fleet.name
 }
 
 resource "azurerm_virtual_network" "default" {
@@ -63,7 +70,7 @@ resource "azurerm_kubernetes_cluster" "capz" {
     vm_size        = "Standard_d2as_v5"
     vnet_subnet_id = azurerm_virtual_network.default.subnet.*.id[0]
     upgrade_settings {
-        max_surge       = 1
+      max_surge = 1
     }
   }
 
@@ -77,9 +84,25 @@ resource "azurerm_kubernetes_cluster" "capz" {
   }
 
   tags = {
-    Type = "Cluster Manager"
+    Type     = "Cluster Manager"
     Workload = "CAPZ"
   }
+}
+
+module "fleet" {
+  source            = "./modules/fleet"
+  fleet_name        = var.fleet_name
+  location          = var.location
+  resource_group_id = azurerm_resource_group.fleet.id
+  fleet_members = {
+    capz_cluster = {
+      clusterName       = azurerm_kubernetes_cluster.capz.name
+      clusterResourceId = azurerm_kubernetes_cluster.capz.id
+    }
+  }
+  depends_on = [
+    azurerm_kubernetes_cluster.capz
+  ]
 }
 
 # see https://learn.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-custom-metrics?tabs=cli#enable-custom-metrics
@@ -94,3 +117,8 @@ resource "azurerm_role_assignment" "omsagent-aks" {
   principal_id                     = azurerm_kubernetes_cluster.capz.oms_agent[0].oms_agent_identity[0].object_id
   skip_service_principal_aad_check = false
 }
+
+# will need to create TF to generate an SPN and save creds to a keyvault
+# right now I am using az cli for the sake of simplicity and I have 
+# a permanent KV in a different RG that I am storing the creds in
+# see this doc for details: https://capz.sigs.k8s.io/topics/getting-started.html

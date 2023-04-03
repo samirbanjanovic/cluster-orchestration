@@ -1,0 +1,21 @@
+apiVersion: fleet.azure.com/v1alpha1
+kind: MemberCluster
+metadata:
+  annotations:
+    fleet.azure.com/cluster-resource-id: /subscriptions/16370fca-8e3f-4920-9c3b-ca98f1791ac1/resourceGroups/webapps-clusters-rg/providers/Microsoft.ContainerService/managedClusters/webapps-cluster-2
+  finalizers:
+  - work.fleet.azure.com/membercluster-finalizer
+  generation: 1
+  labels:
+    fleet.azure.com/location: eastus
+    fleet.azure.com/resource-group: webapps-clusters-rg
+    fleet.azure.com/subscription-id: 16370fca-8e3f-4920-9c3b-ca98f1791ac1
+    capz.fleet/workload: worker
+    capz.fleet/workload-type: webapps
+  name: webapps-cluster-2
+spec:
+  heartbeatPeriodSeconds: 60
+  identity:
+    kind: User
+    name: b881cbda-65ae-49a4-b2d6-dca025fc793d
+  state: Join

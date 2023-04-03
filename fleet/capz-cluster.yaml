@@ -1,0 +1,20 @@
+apiVersion: fleet.azure.com/v1alpha1
+kind: MemberCluster
+metadata:
+  annotations:
+    fleet.azure.com/cluster-resource-id: /subscriptions/16370fca-8e3f-4920-9c3b-ca98f1791ac1/resourceGroups/fleet-orchestration-rg/providers/Microsoft.ContainerService/managedClusters/capz-cluster
+  finalizers:
+  - work.fleet.azure.com/membercluster-finalizer
+  generation: 1
+  labels:
+    fleet.azure.com/location: eastus
+    fleet.azure.com/resource-group: fleet-orchestration-rg
+    fleet.azure.com/subscription-id: 16370fca-8e3f-4920-9c3b-ca98f1791ac1
+    capz.fleet/workload: cluster_manager
+  name: capz-cluster
+spec:
+  heartbeatPeriodSeconds: 60
+  identity:
+    kind: User
+    name: 82b9e511-faf6-4ef2-b04b-c6a1262c8586
+  state: Join
