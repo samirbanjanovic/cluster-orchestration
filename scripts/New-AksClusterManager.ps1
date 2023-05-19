@@ -1,8 +1,4 @@
-
-param(
-    $resourceGroup
-)
-
+$resourceGroup = "fleet-orchestration-rg"
 # I have these variabels set as persistent environment variables
 # you can opt to do the same or set them during runtime
 #
@@ -16,7 +12,7 @@ $env:CLUSTER_IDENTITY_NAME = "cluster-identity"
 $env:AZURE_CLUSTER_IDENTITY_SECRET_NAMESPACE = "default"
 
 # Name of the Azure datacenter location. Change this value to your desired location.
-$env:AZURE_LOCATION = "eastus"
+ls 
 
 # Select VM types.
 $env:AZURE_CONTROL_PLANE_MACHINE_TYPE = "Standard_D2s_v3"
@@ -35,7 +31,7 @@ $env:EXP_MACHINE_POOL = "true"
 # optional feature flag for health monitoring
 # https://github.com/kubernetes-sigs/cluster-api-provider-azure/blob/main/docs/book/src/topics/managedcluster.md
 $env:EXP_AKS_RESOURCE_HEALTH = "true"
-$env:WORKER_MACHINE_COUNT = 1
+$env:WORKER_MACHINE_COUNT = 2
 
 
 ######## !!! IMPORTANT: Your kubectl context must be set to the capz management cluster !!! ########

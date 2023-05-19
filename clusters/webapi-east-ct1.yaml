@@ -1,7 +1,7 @@
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: Cluster
 metadata:
-  name: gpu-cluster-1
+  name: webapi-east-ct1
   namespace: default
 spec:
   clusterNetwork:
@@ -11,16 +11,16 @@ spec:
   controlPlaneRef:
     apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
     kind: AzureManagedControlPlane
-    name: gpu-cluster-1
+    name: webapi-east-ct1
   infrastructureRef:
     apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
     kind: AzureManagedCluster
-    name: gpu-cluster-1
+    name: webapi-east-ct1
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureManagedControlPlane
 metadata:
-  name: gpu-cluster-1
+  name: webapi-east-ct1
   namespace: default
 spec:
   identityRef:
@@ -36,70 +36,68 @@ spec:
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureManagedCluster
 metadata:
-  name: gpu-cluster-1
+  name: webapi-east-ct1
   namespace: default
 ---
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: MachinePool
 metadata:
-  name: gpu-cluster-1-system
+  name: webapi-east-ct1-pool0
   namespace: default
 spec:
-  clusterName: gpu-cluster-1
-  replicas: 2
-  template:
-    metadata: {}
-    spec:
-      bootstrap:
-        dataSecretName: ""
-      clusterName: gpu-cluster-1
-      infrastructureRef:
-        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
-        kind: AzureManagedMachinePool
-        name: gpu-cluster-1-system
-      version: 1.25.5
----
-apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
-kind: AzureManagedMachinePool
-metadata:
-  name: gpu-cluster-1-system
-  namespace: default
-spec:
-  mode: System
-  name: system
-  sku: Standard_D2s_v3
----
-apiVersion: cluster.x-k8s.io/v1beta1
-kind: MachinePool
-metadata:
-  name: gpu-cluster-1-gpunp1
-  namespace: default
-spec:
-  clusterName: gpu-cluster-1
+  clusterName: webapi-east-ct1
   replicas: 3
   template:
     metadata: {}
     spec:
       bootstrap:
         dataSecretName: ""
-      clusterName: gpu-cluster-1
+      clusterName: webapi-east-ct1
       infrastructureRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
         kind: AzureManagedMachinePool
-        name: gpu-cluster-1-gpunp1
+        name: webapi-east-ct1-pool0
       version: 1.25.5
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureManagedMachinePool
 metadata:
-  annotations:
-    infrastructure.cluster.x-k8s.io/custom-header-UseGPUDedicatedVHD: "true"
-  name: gpu-cluster-1-gpunp1
+  name: webapi-east-ct1-pool0
+  namespace: default
+spec:
+  mode: System
+  name: pool0
+  sku: Standard_D2s_v3
+---
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: MachinePool
+metadata:
+  name: webapi-east-ct1-pool1
+  namespace: default
+spec:
+  clusterName: webapi-east-ct1
+  replicas: 3
+  template:
+    metadata: {}
+    spec:
+      bootstrap:
+        dataSecretName: ""
+      clusterName: webapi-east-ct1
+      infrastructureRef:
+        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+        kind: AzureManagedMachinePool
+        name: webapi-east-ct1-pool1
+      version: 1.25.5
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: AzureManagedMachinePool
+metadata:
+  name: webapi-east-ct1-pool1
   namespace: default
 spec:
   mode: User
-  name: gpunp1
-  sku: Standard_NC24ads_A100_v4
+  name: pool1
+  sku: Standard_D2s_v3
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureClusterIdentity

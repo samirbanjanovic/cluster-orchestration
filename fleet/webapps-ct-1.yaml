@@ -1,7 +1,7 @@
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: Cluster
 metadata:
-  name: webapps-cluster-4
+  name: webapps-ct-1
   namespace: default
 spec:
   clusterNetwork:
@@ -11,16 +11,16 @@ spec:
   controlPlaneRef:
     apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
     kind: AzureManagedControlPlane
-    name: webapps-cluster-4
+    name: webapps-ct-1
   infrastructureRef:
     apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
     kind: AzureManagedCluster
-    name: webapps-cluster-4
+    name: webapps-ct-1
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureManagedControlPlane
 metadata:
-  name: webapps-cluster-4
+  name: webapps-ct-1
   namespace: default
 spec:
   identityRef:
@@ -36,97 +36,67 @@ spec:
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureManagedCluster
 metadata:
-  name: webapps-cluster-4
+  name: webapps-ct-1
   namespace: default
 ---
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: MachinePool
 metadata:
-  name: webapps-cluster-4-system
+  name: webapps-ct-1-pool0
   namespace: default
 spec:
-  clusterName: webapps-cluster-4
+  clusterName: webapps-ct-1
   replicas: 3
   template:
     metadata: {}
     spec:
       bootstrap:
         dataSecretName: ""
-      clusterName: webapps-cluster-4
+      clusterName: webapps-ct-1
       infrastructureRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
         kind: AzureManagedMachinePool
-        name: webapps-cluster-4-system
+        name: webapps-ct-1-pool0
       version: 1.25.5
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureManagedMachinePool
 metadata:
-  name: webapps-cluster-4-system
+  name: webapps-ct-1-pool0
   namespace: default
 spec:
   mode: System
-  name: system
+  name: pool0
   sku: Standard_D2s_v3
 ---
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: MachinePool
 metadata:
-  name: webapps-cluster-4-pool1
+  name: webapps-ct-1-pool1
   namespace: default
 spec:
-  clusterName: webapps-cluster-4
-  replicas: 1
+  clusterName: webapps-ct-1
+  replicas: 4
   template:
     metadata: {}
     spec:
       bootstrap:
         dataSecretName: ""
-      clusterName: webapps-cluster-4
+      clusterName: webapps-ct-1
       infrastructureRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
         kind: AzureManagedMachinePool
-        name: webapps-cluster-4-pool1
+        name: webapps-ct-1-pool1
       version: 1.25.5
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureManagedMachinePool
 metadata:
-  name: webapps-cluster-4-pool1
+  name: webapps-ct-1-pool1
   namespace: default
 spec:
   mode: User
   name: pool1
-  sku: Standard_D2s_v3
----
-apiVersion: cluster.x-k8s.io/v1beta1
-kind: MachinePool
-metadata:
-  name: webapps-cluster-4-pool2
-  namespace: default
-spec:
-  clusterName: webapps-cluster-4
-  replicas: 1
-  template:
-    metadata: {}
-    spec:
-      bootstrap:
-        dataSecretName: ""
-      clusterName: webapps-cluster-4
-      infrastructureRef:
-        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
-        kind: AzureManagedMachinePool
-        name: webapps-cluster-4-pool2
-      version: 1.25.5
----
-apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
-kind: AzureManagedMachinePool
-metadata:
-  name: webapps-cluster-4-pool2
-  namespace: default
-spec:
-  mode: User
-  name: pool2
   sku: Standard_D2s_v3
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1

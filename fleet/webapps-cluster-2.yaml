@@ -11,7 +11,7 @@ metadata:
     fleet.azure.com/resource-group: webapps-clusters-rg
     fleet.azure.com/subscription-id: 16370fca-8e3f-4920-9c3b-ca98f1791ac1
     capz.fleet/workload: worker
-    capz.fleet/workload-type: webapps
+    capz.fleet/workload-type: serverless  
   name: webapps-cluster-2
 spec:
   heartbeatPeriodSeconds: 60

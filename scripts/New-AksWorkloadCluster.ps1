@@ -1,6 +1,6 @@
-$clusterName = "webapps-cluster-1"
+$clusterName = "webapi-central-ct3"
 $resourceGroup = "webapps-clusters-rg"
-$location = "eastus"
+$location = "centralus"
 $k8sVersion = "1.25.5"
 $fleetName = "webapps-fleet"
 $definitionFilePath = "~\repos\aks-cluster-orchestration\clusterctl\definitions\aks-standard-3NP.yaml"
@@ -44,9 +44,9 @@ $env:CONTROL_PLANE_MACHINE_COUNT=$controlPlaneMachineCount
 ######## !!! IMPORTANT: Your kubectl context must be set to the capz management cluster !!! ########
 
 # generate cluster definition yaml
-Get-Content $definitionFilePath | `
-        clusterctl generate cluster $clusterName `
-        --kubernetes-version $k8sVersion > $clusterName.yaml
+#Get-Content $definitionFilePath | `
+clusterctl generate cluster $clusterName `
+        --kubernetes-version $k8sVersion --flavor aks > "C:\Users\sbanjanovic\source\repos\aks-cluster-orchestration\clusters\$clusterName.yaml"
 
 # create the workload cluster
 # at this point we assume you've created
@@ -57,12 +57,12 @@ kubectl apply -f $clusterName.yaml
 # wait for the workload cluster to be ready
 kubectl wait cluster -n default $clusterName --for=condition=Ready --timeout=45m
 
-$clusterId = "/subscriptions/$env:AZURE_SUBSCRIPTION_ID/resourceGroups/$env:AZURE_RESOURCE_GROUP/providers/Microsoft.ContainerService/managedClusters/$clusterName"
+#$clusterId = "/subscriptions/$env:AZURE_SUBSCRIPTION_ID/resourceGroups/$env:AZURE_RESOURCE_GROUP/providers/Microsoft.ContainerService/managedClusters/$clusterName"
 
 # add cluster to fleet
 az fleet member create `
-    --fleet-name $fleetName `
-    --member-cluster-id $clusterId `
-    --name $clusterName `
-    --resource-group $resourceGroup
+   --fleet-name $fleetName `
+   --member-cluster-id $clusterId `
+   --name $clusterName `
+   --resource-group $resourceGroup
     
