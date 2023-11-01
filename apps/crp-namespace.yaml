@@ -7,7 +7,7 @@ spec:
     - group: ""
       version: v1
       kind: Namespace
-      name: carvana-demo
+      name: good-fellas-demo
   policy:
     affinity:
       clusterAffinity:
